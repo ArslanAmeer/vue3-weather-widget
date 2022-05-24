@@ -23,6 +23,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { Weather } from "@/models/Weather";
+import { slugify } from "@/utils/slugify";
 
 export default defineComponent({
     props: {
@@ -36,9 +37,9 @@ export default defineComponent({
         getImage() {
             let imgSrc = "";
             try {
-                imgSrc = require(`../assets/weather-widget-icons/ww-icon-${this.weatherForecast.main.toLowerCase()}.svg`);
+                imgSrc = require(`../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.main)}.svg`);
             } catch (error) {
-                console.error(`Image '../assets/weather-widget-icons/ww-icon-${this.weatherForecast.main.toLowerCase()}.svg' not found!`);
+                console.error(`Image '../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.main)}.svg' not found!`);
             }
             return imgSrc;
         },
