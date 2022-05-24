@@ -1,18 +1,46 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <div class="container">
+    <WeatherWidget />
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
+import WeatherWidget from '@/components/WeatherWidget.vue';
 
 export default defineComponent({
-  setup() {
-    const msg = "Hello world!";
-
-    return { msg };
+  components: {
+    WeatherWidget,
   },
 });
 </script>
 
-<style lang="sass">
+<style lang="scss">
+// Setting Global body style
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, Arial, sans-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span {
+    font-weight: 400;
+    color: #ffffff;
+  }
+
+  // Setting container to place content in center of page
+  .container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+}
 </style>
