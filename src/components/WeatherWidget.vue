@@ -1,6 +1,29 @@
 <template>
   <div class="widget-wrap">
-    <MiniForecastWidget v-for="(obj, index) in weather" :weatherForecast="obj" :key="index" />
+
+    <div class="current-weather">
+
+      <div class="weather-icon">
+        <img src="@/assets/weather-widget-icons/ww-icon-clear-sky-night.svg" alt="weather-icon">
+      </div>
+
+      <div class="weather-detail">
+
+        <h2>Barcelona, Spain</h2>
+        <h3>19°C</h3>
+
+        <div class="weather-description">
+          <p>Humidity: 50%</p>
+          <p>UVI: 0.58</p>
+          <p>Wind: NW 3kmh</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="mini-forecast-widget-wrapper">
+      <MiniForecastWidget v-for="(obj, index) in weather" :weatherForecast="obj" :key="index" />
+    </div>
   </div>
 </template>
 
@@ -77,6 +100,11 @@ export default defineComponent({
 
     return { weather };
   },
+  computed: {
+    mpsToKmh(mps: number) {
+      return Math.round(mps * 3.6);
+    }
+  },
   components: {
     MiniForecastWidget
   },
@@ -92,8 +120,60 @@ export default defineComponent({
   border-radius: 20px;
   padding: 20px 30px;
   box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
+
+  .current-weather {
+    display: flex;
+    align-items: center;
+    margin-bottom: 28px;
+
+    .weather-icon {
+      width: 117px;
+      height: 117px;
+
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
+
+      }
+    }
+
+    .weather-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 25px;
+
+      h2 {
+        font-size: 25px;
+        margin: 0;
+        padding: 0;
+      }
+
+      h3 {
+        font-size: 20px;
+        margin: 5px 0;
+        padding: 0;
+      }
+
+      .weather-description {
+        p {
+          margin: 0;
+          padding: 0;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+
+  .mini-forecast-widget-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
 }
 </style>
 
