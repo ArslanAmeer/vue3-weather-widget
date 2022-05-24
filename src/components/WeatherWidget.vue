@@ -100,11 +100,6 @@ export default defineComponent({
 
     return { weather };
   },
-  computed: {
-    mpsToKmh(mps: number) {
-      return Math.round(mps * 3.6);
-    }
-  },
   components: {
     MiniForecastWidget
   },
