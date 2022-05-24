@@ -85,6 +85,7 @@ export default defineComponent({
             width: 100%;
             height: 100%;
             object-fit: contain;
+            object-position: center;
             filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
         }
     }
