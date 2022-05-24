@@ -1,5 +1,5 @@
 <template>
-    <div class="miniWidget">
+    <div class="mini-widget">
 
         <h6 class="day-header">
             {{ getDay }}
@@ -52,7 +52,7 @@ export default defineComponent({
 
 
 <style lang="scss" scoped>
-.miniWidget {
+.mini-widget {
     display: flex;
     flex-direction: column;
     align-items: center;
