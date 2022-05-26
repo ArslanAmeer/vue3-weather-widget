@@ -35,7 +35,7 @@ export default defineComponent({
     },
     computed: {
         getImage() {
-            return getIconPath(this.weatherForecast.weatherMain);
+            return getIconPath(this.weatherForecast.weatherId, this.weatherForecast.weatherMain, this.weatherForecast.weatherIcon);
         },
         getDay() {
             const currentDay = new Date().toLocaleDateString("en", { weekday: "long" });

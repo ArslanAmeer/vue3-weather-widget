@@ -5,7 +5,8 @@
     <div class="current-weather" v-if="currentWeather !== null && currentWeather != undefined">
 
       <div class="weather-icon">
-        <img src="../assets/weather-widget-icons/ww-icon-cloud-fog.svg" alt="weather-icon">
+        <!-- Using object tag to render Animated SVG. Custom animation using https://www.svgator.com/  -->
+        <object type="image/svg+xml" :data="weatherIcon"></object>
       </div>
 
       <div class="weather-detail">
@@ -39,8 +40,9 @@ import MiniForecastWidget from "./MiniForecastWidget.vue";
 
 // Custom Utils and Models Imports
 import { Weather, WeatherSummary } from "@/models/Weather";
-import { windDirection } from "@/utils/wind-direction"
-import { getCountryByCode } from "@/utils/countries-list"
+import { windDirection } from "@/utils/wind-direction";
+import { getCountryByCode } from "@/utils/countries-list";
+import { getIconPath } from "@/utils/fetch-weather-icon"
 
 export default defineComponent({
   setup() {
@@ -51,8 +53,10 @@ export default defineComponent({
     let dummyData: Weather = {
       city: "---",
       country: "---",
-      weatherMain: "---",
-      weatherDescription: "---",
+      weatherId: 800,
+      weatherMain: "Clear",
+      weatherIcon: "01d",
+      weatherDescription: "clear",
       temperature: 0,
       date: 0,
       humidity: 0,
@@ -73,7 +77,9 @@ export default defineComponent({
       const mappedData: Weather = {
         city: 'barcelona',
         country: 'ES',
+        weatherId: resp.current.weather[0].id,
         weatherMain: resp.current.weather[0].main,
+        weatherIcon: resp.current.weather[0].icon,
         weatherDescription: resp.current.weather[0].description,
         temperature: resp.current.temp,
         date: resp.current.dt,
@@ -94,7 +100,9 @@ export default defineComponent({
       dailyForecastData.map((obj) => {
         const mappedData: WeatherSummary = {
           weatherMain: obj.weather[0].main,
+          weatherId: obj.weather[0].id,
           weatherDescription: obj.weather[0].description,
+          weatherIcon: obj.weather[0].icon,
           date: obj.dt,
           maxTemperature: Math.round(obj.temp.max),
           minTemperature: Math.round(obj.temp.min),
@@ -117,8 +125,9 @@ export default defineComponent({
     const country = computed(() => getCountryByCode(currentWeather.value.country)); // Computing country by invoking custom 'getCountryByCode' util function
     const temperature = computed(() => Math.round(currentWeather.value.temperature)); // Round Temperature to nearest integer
     const windSpeed = computed(() => Math.round(currentWeather.value.windSpeed)); // Round Wind speed to nearest integer
+    const weatherIcon = computed(() => getIconPath(currentWeather.value.weatherId, currentWeather.value.weatherMain, currentWeather.value.weatherIcon)); // Get weather icon by invoking custom 'getWeatherIcon' util function
 
-    return { weatherData, windDir, currentWeather, country, temperature, windSpeed };
+    return { weatherData, windDir, currentWeather, country, temperature, windSpeed, weatherIcon };
   },
   components: {
     MiniForecastWidget
@@ -145,12 +154,11 @@ export default defineComponent({
       width: 117px;
       height: 117px;
 
-
-      img {
+      object {
         width: 100%;
         height: 100%;
-        object-fit: contain;
-        object-position: center;
+        // object-fit: contain;
+        // object-position: center;
         filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
 
       }

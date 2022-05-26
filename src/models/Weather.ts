@@ -3,6 +3,8 @@ export interface Weather {
 	country: string;
 	weatherMain: string;
 	weatherDescription: string;
+	weatherId: number;
+	weatherIcon: string;
 	temperature: number;
 	date: number;
 	humidity: number;
@@ -14,6 +16,8 @@ export interface Weather {
 export interface WeatherSummary {
 	weatherMain: string;
 	weatherDescription: string;
+	weatherId: number;
+	weatherIcon: string;
 	maxTemperature: number;
 	minTemperature: number;
 	date: number;
