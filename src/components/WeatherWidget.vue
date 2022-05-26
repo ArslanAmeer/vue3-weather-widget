@@ -1,6 +1,7 @@
 <template>
   <div class="widget-wrap">
 
+    <!-- Current weather status -->
     <div class="current-weather" v-if="currentWeather !== null && currentWeather != undefined">
 
       <div class="weather-icon">
@@ -9,45 +10,50 @@
 
       <div class="weather-detail">
 
-        <h2>{{ currentWeather.city }}, {{ currentWeather.country }}</h2>
-        <h3>{{ currentWeather.temperature }}°C</h3>
+        <h2>{{ currentWeather.city }}, {{ country }}</h2>
+        <h3>{{ temperature }}°C</h3>
 
         <div class="weather-description">
           <p>Humidity: {{ currentWeather.humidity }}%</p>
           <p>UVI: {{ currentWeather.uvi }}</p>
-          <p>Wind: {{ windDir }} {{ currentWeather.windSpeed }}kmh</p>
+          <p>Wind: {{ windDir }} {{ windSpeed }}kmh</p>
         </div>
 
       </div>
     </div>
 
-    <div class="mini-forecast-widget-wrapper">
+    <!-- Next Five days weather forecast -->
+    <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper">
       <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
     </div>
+
   </div>
 </template>
 
 <script lang="ts">
-import { Weather } from "@/models/Weather";
+// Built-in Imports
 import { computed, defineComponent, onMounted, ref } from "vue";
+
+// Component Import
 import MiniForecastWidget from "./MiniForecastWidget.vue";
+
+// Custom Utils and Models Imports
+import { Weather, WeatherSummary } from "@/models/Weather";
 import { windDirection } from "@/utils/wind-direction"
-import { mpsToKph } from "@/utils/speed-converters"
+import { getCountryByCode } from "@/utils/countries-list"
 
 export default defineComponent({
   setup() {
     const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=2.159&lat=41.3888&units=metric&exclude=minutely,hourly&appid=4a9232de37b1880944eb4e365aa69011`;
     // const geoCodeAPI = `http://api.openweathermap.org/geo/1.0/reverse?lon=2.159&lat=41.3888&limit=1&appid=4a9232de37b1880944eb4e365aa69011`;
 
-
+    // TODO: Dummy data | to be removed later
     let dummyData: Weather = {
       city: "barcelona",
       country: "spain",
-      weatherMain: "Snow",
+      weatherMain: "clear",
       weatherDescription: "Rain with snow",
       temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
       date: 1611662400,
       humidity: 0,
       uvi: 2,
@@ -56,102 +62,17 @@ export default defineComponent({
     };
 
     const currentWeather = ref<Weather>(dummyData);
-    const show = ref(false);
+    const weatherData = ref<WeatherSummary[]>([]);
 
-    onMounted(() => {
-      getResponse();
-    });
-
-
-
-    // TODO: Dummy data : remove
-    let weatherData: Weather[] = [{
-      weatherMain: "Snow",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
-      date: 1611662400,
-      humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
-    }, {
-      weatherMain: "Rain",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
-      date: 1611662400,
-      humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
-    }, {
-      weatherMain: "Snow",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
-      date: 1611662400,
-      humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
-    }, {
-      weatherMain: "Snow",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
-      date: 1611662400,
-      humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
-    }, {
-      weatherMain: "Snow",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
-      date: 1611662400,
-      humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
-    }, {
-      weatherMain: "Snow",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
-      date: 1611662400,
-      humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
-    }, {
-      weatherMain: "Snow",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      maxTemperature: 8,
-      minTemperature: 1,
-      date: 1611662400,
-      humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
-    }]
-
-
+    // Fetches weather data from the Open Weather API
     const getResponse = async () => {
-
       const response = await fetch(weatherAPI);
       const resp = await response.json();
+
+      // Manually mapping response to our model
       const mappedData: Weather = {
         city: 'barcelona',
-        country: 'spain',
+        country: 'ES',
         weatherMain: resp.current.weather[0].main,
         weatherDescription: resp.current.weather[0].description,
         temperature: resp.current.temp,
@@ -161,15 +82,43 @@ export default defineComponent({
         windSpeed: resp.current.wind_speed,
         windDeg: resp.current.wind_deg,
       }
+
+      // Update current weather data
       currentWeather.value = mappedData;
-      show.value = false;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dailyForecastData: any[] = resp.daily;
+      const mappedDailyForecast: WeatherSummary[] = [];
+
+      // Manually mapping Daily forecast response array to our custom model array
+      dailyForecastData.map((obj) => {
+        const mappedData: WeatherSummary = {
+          weatherMain: obj.weather[0].main,
+          weatherDescription: obj.weather[0].description,
+          date: obj.dt,
+          maxTemperature: Math.round(obj.temp.max),
+          minTemperature: Math.round(obj.temp.min),
+        }
+
+        mappedDailyForecast.push(mappedData);
+      });
+
+      // Update forecast data with next five days only
+      weatherData.value = mappedDailyForecast.slice(0, 6);
+
     }
 
+    onMounted(() => {
+      getResponse();
+    });
 
-    const windDir = computed(() => windDirection(dummyData.windDeg));
-    const speed = computed(() => mpsToKph(dummyData.windSpeed))
 
-    return { dummyData, weatherData, windDir, speed, show, currentWeather };
+    const windDir = computed(() => windDirection(currentWeather.value.windDeg)); // Computing wind direction by invoking custom 'windDirection' util function
+    const country = computed(() => getCountryByCode(currentWeather.value.country)); // Computing country by invoking custom 'getCountryByCode' util function
+    const temperature = computed(() => Math.round(currentWeather.value.temperature)); // Round Temperature to nearest integer
+    const windSpeed = computed(() => Math.round(currentWeather.value.windSpeed)); // Round Wind speed to nearest integer
+
+    return { weatherData, windDir, currentWeather, country, temperature, windSpeed };
   },
   components: {
     MiniForecastWidget
