@@ -5,7 +5,7 @@
     <div class="current-weather" v-if="currentWeather !== null && currentWeather != undefined">
 
       <div class="weather-icon">
-        <img src="@/assets/weather-widget-icons/ww-icon-clear-sky-night.svg" alt="weather-icon">
+        <img src="../assets/weather-widget-icons/ww-icon-cloud-fog.svg" alt="weather-icon">
       </div>
 
       <div class="weather-detail">
