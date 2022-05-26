@@ -1,0 +1,22 @@
+_id: req_afb1864e2731427ab43d6d7d159a65f1
+type: Request
+parentId: wrk_3e99b1306bb1496180ca175ddbf21792
+modified: 1653554596358
+created: 1653554362941
+url: https://api.openweathermap.org/data/2.5/onecall?lon=2.159&lat=41.3888&units=metric&exclude=minutely,hourly&appid={{
+  _.apiKey }}
+name: Fetch Daily Weather Forecast
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1653554399863
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

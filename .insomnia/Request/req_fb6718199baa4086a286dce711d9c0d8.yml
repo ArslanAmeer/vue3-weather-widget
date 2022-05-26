@@ -1,0 +1,22 @@
+_id: req_fb6718199baa4086a286dce711d9c0d8
+type: Request
+parentId: wrk_3e99b1306bb1496180ca175ddbf21792
+modified: 1653554648051
+created: 1653554399813
+url: http://api.openweathermap.org/geo/1.0/reverse?lon=2.159&lat=41.3888&limit=1&appid={{
+  _.apiKey }}
+name: Reverse Geocode
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1653554399813
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

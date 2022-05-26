@@ -1,0 +1,21 @@
+_id: req_cf906c76ec0a48e98aaa3740daa31f0a
+type: Request
+parentId: wrk_3e99b1306bb1496180ca175ddbf21792
+modified: 1653555128906
+created: 1653554948105
+url: https://restcountries.com/v3.1/alpha/ES
+name: Get Countries
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1653554948107
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
