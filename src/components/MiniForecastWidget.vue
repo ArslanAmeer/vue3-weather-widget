@@ -97,6 +97,7 @@ export default defineComponent({
 
         &.max-temp {
             color: #FF0000;
+            margin-bottom: 4px;
         }
 
         &.min-temp {
