@@ -49,16 +49,16 @@ export default defineComponent({
 
     // TODO: Dummy data | to be removed later
     let dummyData: Weather = {
-      city: "barcelona",
-      country: "spain",
-      weatherMain: "clear",
-      weatherDescription: "Rain with snow",
-      temperature: 2,
-      date: 1611662400,
+      city: "---",
+      country: "---",
+      weatherMain: "---",
+      weatherDescription: "---",
+      temperature: 0,
+      date: 0,
       humidity: 0,
-      uvi: 2,
-      windSpeed: 34,
-      windDeg: 70,
+      uvi: 0,
+      windSpeed: 0,
+      windDeg: 0,
     };
 
     const currentWeather = ref<Weather>(dummyData);
