@@ -1,6 +1,6 @@
 export interface Weather {
-	city: string;
-	country: string;
+	city?: string;
+	country?: string;
 	weatherMain: string;
 	weatherDescription: string;
 	weatherId: number;

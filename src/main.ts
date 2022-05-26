@@ -1,4 +1,8 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
 
-createApp(App).mount('#app')
+import VueLoading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+
+import App from './App.vue';
+
+createApp(App).use(VueLoading).mount('#app');

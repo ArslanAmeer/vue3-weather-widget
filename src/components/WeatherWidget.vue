@@ -1,8 +1,8 @@
 <template>
-  <div class="widget-wrap">
+  <div class="widget-wrap" v-if="currentWeather !== null && currentWeather != undefined && location.city">
 
     <!-- Current weather status -->
-    <div class="current-weather" v-if="currentWeather !== null && currentWeather != undefined">
+    <div class="current-weather">
 
       <div class="weather-icon">
         <!-- Using object tag to render Animated SVG. Custom animation using https://www.svgator.com/  -->
@@ -11,7 +11,7 @@
 
       <div class="weather-detail">
 
-        <h2>{{ currentWeather.city }}, {{ country }}</h2>
+        <h2>{{ location.city }}, {{ location.country }}</h2>
         <h3>{{ temperature }}°C</h3>
 
         <div class="weather-description">
@@ -22,11 +22,11 @@
 
       </div>
     </div>
-
     <!-- Next Five days weather forecast -->
     <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper">
       <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
     </div>
+
 
   </div>
 </template>
@@ -34,6 +34,9 @@
 <script lang="ts">
 // Built-in Imports
 import { computed, defineComponent, onMounted, ref } from "vue";
+
+// 3rd Party Import
+import { useLoading } from 'vue-loading-overlay'
 
 // Component Import
 import MiniForecastWidget from "./MiniForecastWidget.vue";
@@ -45,9 +48,12 @@ import { getCountryByCode } from "@/utils/countries-list";
 import { getIconPath } from "@/utils/fetch-weather-icon"
 
 export default defineComponent({
-  setup() {
-    const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=2.159&lat=41.3888&units=metric&exclude=minutely,hourly&appid=4a9232de37b1880944eb4e365aa69011`;
-    // const geoCodeAPI = `http://api.openweathermap.org/geo/1.0/reverse?lon=2.159&lat=41.3888&limit=1&appid=4a9232de37b1880944eb4e365aa69011`;
+  setup(props) {
+    const $loading = useLoading();
+
+
+    const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=${props.lon}&lat=${props.lat}&units=metric&exclude=minutely,hourly&appid=${process.env.OPEN_WEATHER_API_KEY}`;
+    const geoCodeAPI = `http://api.openweathermap.org/geo/1.0/reverse?lon=${props.lon}&lat=${props.lat}&limit=1&appid=${process.env.OPEN_WEATHER_API_KEY}`;
 
     // TODO: Dummy data | to be removed later
     let dummyData: Weather = {
@@ -67,16 +73,35 @@ export default defineComponent({
 
     const currentWeather = ref<Weather>(dummyData);
     const weatherData = ref<WeatherSummary[]>([]);
+    const location = ref<{ city: string, country: string }>({
+      city: "",
+      country: "-",
+    });
+
+    // Fetching location with latitude and longitude
+    const reverseGeocode = async () => {
+      await fetch(geoCodeAPI)
+        .then(res => res.json())
+        .then(res => {
+          const country = getCountryByCode(res[0].country);
+          currentWeather.value.country = country;
+          location.value = {
+            city: res[0].name,
+            country: country,
+          };
+        });
+    };
 
     // Fetches weather data from the Open Weather API
-    const getResponse = async () => {
+    const fetchWeatherForecast = async () => {
+      const loader = $loading.show({
+        color: '#0668C2',
+      });
       const response = await fetch(weatherAPI);
       const resp = await response.json();
 
       // Manually mapping response to our model
       const mappedData: Weather = {
-        city: 'barcelona',
-        country: 'ES',
         weatherId: resp.current.weather[0].id,
         weatherMain: resp.current.weather[0].main,
         weatherIcon: resp.current.weather[0].icon,
@@ -98,7 +123,7 @@ export default defineComponent({
 
       // Manually mapping Daily forecast response array to our custom model array
       dailyForecastData.map((obj) => {
-        const mappedData: WeatherSummary = {
+        const mappedDailyForecastData: WeatherSummary = {
           weatherMain: obj.weather[0].main,
           weatherId: obj.weather[0].id,
           weatherDescription: obj.weather[0].description,
@@ -108,16 +133,19 @@ export default defineComponent({
           minTemperature: Math.round(obj.temp.min),
         }
 
-        mappedDailyForecast.push(mappedData);
+        mappedDailyForecast.push(mappedDailyForecastData);
       });
 
       // Update forecast data with next five days only
       weatherData.value = mappedDailyForecast.slice(0, 6);
 
+      loader.hide();
+
     }
 
     onMounted(() => {
-      getResponse();
+      reverseGeocode();
+      fetchWeatherForecast();
     });
 
 
@@ -127,10 +155,20 @@ export default defineComponent({
     const windSpeed = computed(() => Math.round(currentWeather.value.windSpeed)); // Round Wind speed to nearest integer
     const weatherIcon = computed(() => getIconPath(currentWeather.value.weatherId, currentWeather.value.weatherMain, currentWeather.value.weatherIcon)); // Get weather icon by invoking custom 'getWeatherIcon' util function
 
-    return { weatherData, windDir, currentWeather, country, temperature, windSpeed, weatherIcon };
+    return { location, weatherData, windDir, currentWeather, country, temperature, windSpeed, weatherIcon };
   },
   components: {
     MiniForecastWidget
+  },
+  props: {
+    lat: {
+      type: Number,
+      required: true,
+    },
+    lon: {
+      type: Number,
+      required: true,
+    },
   }
 });
 </script>

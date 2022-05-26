@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <WeatherWidget />
+    <WeatherWidget :lat="41.3888" :lon="2.159" />
   </div>
 </template>
 
