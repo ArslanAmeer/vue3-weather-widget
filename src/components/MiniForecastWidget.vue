@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { WeatherSummary } from "@/models/Weather";
-import { slugify } from "@/utils/slugify";
+import { getIconPath } from "@/utils/fetch-weather-icon"
 
 export default defineComponent({
     props: {
@@ -35,13 +35,7 @@ export default defineComponent({
     },
     computed: {
         getImage() {
-            let imgSrc = "";
-            try {
-                imgSrc = require(`../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.weatherMain)}.svg`);
-            } catch (error) {
-                console.error(`Image '../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.weatherMain)}.svg' not found!`);
-            }
-            return imgSrc;
+            return getIconPath(this.weatherForecast.weatherMain);
         },
         getDay() {
             return new Date(this.weatherForecast.date * 1000).toLocaleDateString("en", { weekday: "long", });
