@@ -1,34 +1,34 @@
 <template>
-  <div class="widget-wrap" v-if="currentWeather !== null && currentWeather != undefined && location.city">
+  <Transition :duration="550" name="nested">
+    <div class="widget-wrap outer" v-if="currentWeather !== null && currentWeather != undefined && location.city">
 
-    <!-- Current weather status -->
-    <div class="current-weather">
+      <!-- Current weather status -->
+      <div class="current-weather">
 
-      <div class="weather-icon">
-        <!-- Using object tag to render Animated SVG. Custom animation using https://www.svgator.com/  -->
-        <object type="image/svg+xml" :data="weatherIcon"></object>
-      </div>
-
-      <div class="weather-detail">
-
-        <h2>{{ location.city }}, {{ location.country }}</h2>
-        <h3>{{ temperature }}°C</h3>
-
-        <div class="weather-description">
-          <p>Humidity: {{ currentWeather.humidity }}%</p>
-          <p>UVI: {{ currentWeather.uvi }}</p>
-          <p>Wind: {{ windDir }} {{ windSpeed }}kmh</p>
+        <div class="weather-icon">
+          <!-- Using object tag to render Animated SVG. Custom animation using https://www.svgator.com/  -->
+          <object type="image/svg+xml" :data="weatherIcon"></object>
         </div>
 
+        <div class="weather-detail">
+
+          <h2>{{ location.city }}, {{ location.country }}</h2>
+          <h3>{{ temperature }}°C</h3>
+
+          <div class="weather-description">
+            <p>Humidity: {{ currentWeather.humidity }}%</p>
+            <p>UVI: {{ currentWeather.uvi }}</p>
+            <p>Wind: {{ windDir }} {{ windSpeed }}kmh</p>
+          </div>
+
+        </div>
+      </div>
+      <!-- Next Five days weather forecast -->
+      <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper inner">
+        <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
       </div>
     </div>
-    <!-- Next Five days weather forecast -->
-    <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper">
-      <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
-    </div>
-
-
-  </div>
+  </Transition>
 </template>
 
 <script lang="ts">
@@ -236,6 +236,40 @@ export default defineComponent({
     flex-wrap: nowrap;
     justify-content: space-between;
   }
+}
+
+// Transition Styling
+.nested-enter-active,
+.nested-leave-active {
+  transition: all 0.8s ease-in-out;
+}
+
+/* delay leave of parent element */
+.nested-leave-active {
+  transition-delay: 0.8s;
+}
+
+.nested-enter-from,
+.nested-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+/* we can also transition nested elements using nested selectors */
+.nested-enter-active .inner,
+.nested-leave-active .inner {
+  transition: all 1s ease-in-out;
+}
+
+/* delay enter of nested element */
+.nested-enter-active .inner {
+  transition-delay: 1s;
+}
+
+.nested-enter-from .inner,
+.nested-leave-to .inner {
+  transform: translateX(30px);
+  opacity: 0.001;
 }
 </style>
 
