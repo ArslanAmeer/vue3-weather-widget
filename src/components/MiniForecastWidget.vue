@@ -38,7 +38,12 @@ export default defineComponent({
             return getIconPath(this.weatherForecast.weatherMain);
         },
         getDay() {
-            return new Date(this.weatherForecast.date * 1000).toLocaleDateString("en", { weekday: "long", });
+            const currentDay = new Date().toLocaleDateString("en", { weekday: "long" });
+            const forecastDay = new Date(this.weatherForecast.date * 1000).toLocaleDateString("en", { weekday: "long", });
+            if (currentDay === forecastDay) {
+                return "Today";
+            }
+            return forecastDay;
         }
     }
 });
