@@ -22,14 +22,14 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { Weather } from "@/models/Weather";
+import { WeatherSummary } from "@/models/Weather";
 import { slugify } from "@/utils/slugify";
 
 export default defineComponent({
     props: {
 
         weatherForecast: {
-            type: Object as PropType<Weather>,
+            type: Object as PropType<WeatherSummary>,
             required: true
         }
     },
