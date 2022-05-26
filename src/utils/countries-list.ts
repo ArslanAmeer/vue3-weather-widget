@@ -252,10 +252,21 @@ const countries = {
 	AX: 'Åland Islands',
 };
 
-export function getCountryByCode(code: string | undefined): string {
-	if (code) {
-		const country = Object.keys(countries).find((key) => countries[key as keyof typeof countries] === code);
-		return country as string;
+/**
+ *
+ * This function returns the country name from the country code
+ *
+ * @param {string} countryCode
+ * @returns {string}
+ * @example
+ * getCountryName('US')
+ * => United States of America
+ */
+
+export function getCountryByCode(countryCode: string | undefined): string {
+	if (countryCode) {
+		countryCode = countryCode?.toUpperCase();
+		return countries[countryCode as keyof typeof countries];
 	}
 
 	return '';
