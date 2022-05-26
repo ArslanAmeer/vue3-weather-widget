@@ -6,7 +6,7 @@
         </h6>
 
         <div class="weather-icon">
-            <img :src="getImage" :alt="weatherForecast.main" />
+            <img :src="getImage" :alt="weatherForecast.weatherMain" />
         </div>
 
         <p class="max-temp">
@@ -37,9 +37,9 @@ export default defineComponent({
         getImage() {
             let imgSrc = "";
             try {
-                imgSrc = require(`../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.main)}.svg`);
+                imgSrc = require(`../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.weatherMain)}.svg`);
             } catch (error) {
-                console.error(`Image '../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.main)}.svg' not found!`);
+                console.error(`Image '../assets/weather-widget-icons/ww-icon-${slugify(this.weatherForecast.weatherMain)}.svg' not found!`);
             }
             return imgSrc;
         },
