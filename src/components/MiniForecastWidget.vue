@@ -1,5 +1,5 @@
 <template>
-    <div class="mini-widget">
+    <div class="mini-widget" :title="weatherForecast.weatherDescription">
 
         <h6 class="day-header">
             {{ getDay }}

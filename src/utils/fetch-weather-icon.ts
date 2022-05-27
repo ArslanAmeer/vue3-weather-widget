@@ -16,9 +16,7 @@ import { getWeatherIconName } from '@/utils/dynamic-icons';
 export function getIconPath(id: number, main: string, icon: string): string {
 	let imgSrc = '';
 	try {
-		imgSrc = require(`@/assets/weather-widget-icons/ww-icon-${slugify(
-			getWeatherIconName(id, main, icon)
-		)}.svg`);
+		imgSrc = `../assets/weather-widget-icons/ww-icon-${slugify(getWeatherIconName(id, main, icon))}.svg`;
 	} catch (error) {
 		console.error(
 			`Image '@/assets/weather-widget-icons/ww-icon-${slugify(

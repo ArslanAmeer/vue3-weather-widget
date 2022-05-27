@@ -1,10 +1,10 @@
 <template>
 
-  <Transition appear name="fade">
+  <Transition name="fade" v-show="!isLoading">
     <div class="widget-wrap weather"
-      :class="{ rain: currentWeather.weatherMain === 'Rain' || rain, snow: currentWeather.weatherMain === 'Snow' }"
+      :class="{ rain: currentWeather.weatherMain === 'Rain' || rain, snow: currentWeather.weatherMain === 'Snow', overlay: isLoading }"
       v-if="location.city">
-      <span title="Turn On/Off Rain Effect" @click="makeItRain" class="icon-rain-drop"></span>
+      <span title="Toggle Rain Effect" @click="makeItRain" class="icon-rain-drop"></span>
       <span title="Refresh Weather" @click="updateWeather" class="icon-reload"></span>
 
       <span @click="updateWeather" class="icon-reload"></span>
@@ -38,17 +38,15 @@
       </Transition>
     </div>
   </Transition>
+  <Transition appear name="fade" v-show="isLoading">
+    <div class="loader"></div>
+  </Transition>
+
 </template>
 
 <script lang="ts">
 // Built-in Imports
-import { computed, defineComponent, onMounted, ref } from "vue";
-
-// 3rd Party Import
-import { useLoading } from 'vue-loading-overlay'
-
-// Component Import
-import MiniForecastWidget from "./MiniForecastWidget.vue";
+import { computed, defineComponent, onBeforeMount, ref } from "vue";
 
 // Custom Utils and Models Imports
 import { Weather, WeatherSummary } from "@/models/Weather";
@@ -56,14 +54,15 @@ import { windDirection } from "@/utils/wind-direction";
 import { getCountryByCode } from "@/utils/countries-list";
 import { getIconPath } from "@/utils/fetch-weather-icon"
 
+// Component Import
+import MiniForecastWidget from "./MiniForecastWidget.vue";
+
 export default defineComponent({
   setup(props) {
 
     // --------------------------------------------------------------------------
     // ------------------------- Initializing variables -------------------------
     // --------------------------------------------------------------------------
-
-    const $loading = useLoading();
 
     const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=${props.lon}&lat=${props.lat}&units=metric&exclude=minutely,hourly&appid=${process.env.OPEN_WEATHER_API_KEY}`;
     const geoCodeAPI = `http://api.openweathermap.org/geo/1.0/reverse?lon=${props.lon}&lat=${props.lat}&limit=1&appid=${process.env.OPEN_WEATHER_API_KEY}`;
@@ -92,6 +91,7 @@ export default defineComponent({
     });
 
     const rain = ref(false)
+    const isLoading = ref(true);
 
     // --------------------------------------------------------------------------
     // ---------------------------- Custom Functions ----------------------------
@@ -102,10 +102,10 @@ export default defineComponent({
       await fetch(geoCodeAPI)
         .then(res => res.json())
         .then(res => {
-          const country = getCountryByCode(res[0].country);
+          const country = getCountryByCode(res[0]?.country);
           currentWeather.value.country = country;
           location.value = {
-            city: res[0].name,
+            city: res[0]?.name,
             country: country,
           };
         });
@@ -113,52 +113,61 @@ export default defineComponent({
 
     // Fetches weather data from the Open Weather API
     const fetchWeatherForecast = async () => {
-      const loader = $loading.show({
-        color: '#0668C2',
-      });
-      const response = await fetch(weatherAPI);
-      const resp = await response.json();
+      isLoading.value = true;
+      // const response = 
+      // const resp = await response.json();
 
-      // Manually mapping response to our model
-      const mappedData: Weather = {
-        weatherId: resp.current.weather[0].id,
-        weatherMain: resp.current.weather[0].main,
-        weatherIcon: resp.current.weather[0].icon,
-        weatherDescription: resp.current.weather[0].description,
-        temperature: resp.current.temp,
-        date: resp.current.dt,
-        humidity: resp.current.humidity,
-        uvi: resp.current.uvi,
-        windSpeed: resp.current.wind_speed,
-        windDeg: resp.current.wind_deg,
-      }
+      await fetch(weatherAPI)
+        .then(resp => resp.json())
+        .then((resp) => {
+          // Manually mapping response to our model
+          if (resp.current) {
+            const mappedData: Weather = {
+              weatherId: resp.current.weather[0].id,
+              weatherMain: resp.current.weather[0].main,
+              weatherIcon: resp.current.weather[0].icon,
+              weatherDescription: resp.current.weather[0].description,
+              temperature: resp.current.temp,
+              date: resp.current.dt,
+              humidity: resp.current.humidity,
+              uvi: resp.current.uvi,
+              windSpeed: resp.current.wind_speed,
+              windDeg: resp.current.wind_deg,
+            }
 
-      // Update current weather data
-      currentWeather.value = mappedData;
+            // Update current weather data
+            currentWeather.value = mappedData;
+          }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const dailyForecastData: any[] = resp.daily;
-      const mappedDailyForecast: WeatherSummary[] = [];
 
-      // Manually mapping Daily forecast response array to our custom model array
-      dailyForecastData.map((obj) => {
-        const mappedDailyForecastData: WeatherSummary = {
-          weatherMain: obj.weather[0].main,
-          weatherId: obj.weather[0].id,
-          weatherDescription: obj.weather[0].description,
-          weatherIcon: obj.weather[0].icon,
-          date: obj.dt,
-          maxTemperature: Math.round(obj.temp.max),
-          minTemperature: Math.round(obj.temp.min),
-        }
+          if (resp.daily) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const dailyForecastData: any[] = resp.daily;
+            const mappedDailyForecast: WeatherSummary[] = [];
 
-        mappedDailyForecast.push(mappedDailyForecastData);
-      });
+            // Manually mapping Daily forecast response array to our custom model array
+            dailyForecastData.map((obj) => {
+              const mappedDailyForecastData: WeatherSummary = {
+                weatherMain: obj.weather[0].main,
+                weatherId: obj.weather[0].id,
+                weatherDescription: obj.weather[0].description,
+                weatherIcon: obj.weather[0].icon,
+                date: obj.dt,
+                maxTemperature: Math.round(obj.temp.max),
+                minTemperature: Math.round(obj.temp.min),
+              }
 
-      // Update forecast data with next five days only
-      weatherData.value = mappedDailyForecast.slice(0, 6);
+              mappedDailyForecast.push(mappedDailyForecastData);
+            });
 
-      loader.hide();
+            // Update forecast data with next five days only
+            weatherData.value = mappedDailyForecast.slice(0, 6);
+            isLoading.value = false;
+          }
+        }).catch((err) => {
+          isLoading.value = false;
+          throw err;
+        });
 
 
 
@@ -177,7 +186,7 @@ export default defineComponent({
     // ---------------------------- Life Cycle Hook -----------------------------
     // --------------------------------------------------------------------------
 
-    onMounted(() => {
+    onBeforeMount(() => {
       reverseGeocode();
       fetchWeatherForecast();
     });
@@ -187,17 +196,17 @@ export default defineComponent({
     // --------------------------------------------------------------------------
 
 
+    const weatherIcon = computed(() => getIconPath(currentWeather.value.weatherId, currentWeather.value.weatherMain, currentWeather.value.weatherIcon)); // Get weather icon by invoking custom 'getWeatherIcon' util function
     const windDir = computed(() => windDirection(currentWeather.value.windDeg)); // Computing wind direction by invoking custom 'windDirection' util function
     const country = computed(() => getCountryByCode(currentWeather.value.country)); // Computing country by invoking custom 'getCountryByCode' util function
     const temperature = computed(() => Math.round(currentWeather.value.temperature)); // Round Temperature to nearest integer
     const windSpeed = computed(() => Math.round(currentWeather.value.windSpeed)); // Round Wind speed to nearest integer
-    const weatherIcon = computed(() => getIconPath(currentWeather.value.weatherId, currentWeather.value.weatherMain, currentWeather.value.weatherIcon)); // Get weather icon by invoking custom 'getWeatherIcon' util function
 
     // --------------------------------------------------------------------------
     // --------------------------------- Return ---------------------------------
     // --------------------------------------------------------------------------
 
-    return { location, weatherData, windDir, currentWeather, country, temperature, windSpeed, weatherIcon, updateWeather, makeItRain, rain };
+    return { location, weatherData, windDir, currentWeather, country, temperature, windSpeed, weatherIcon, updateWeather, makeItRain, rain, isLoading };
   },
   components: {
     MiniForecastWidget
@@ -362,6 +371,48 @@ export default defineComponent({
 .slide-fade-leave-to {
   transform: translateX(20px);
   opacity: 0;
+}
+
+// Custom Loading Spinner Styling
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  border: 5px solid #f3f3f3;
+  /* Light grey */
+  border-top: 5px solid #0668C2;
+  /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 0.5s linear infinite;
+
+}
+
+.overlay {
+  &:after {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: -5%;
+    width: 150%;
+    height: 150%;
+    background: rgba(255, 255, 255, 0.4);
+    z-index: 10;
+    transition: all 0.5s ease;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 </style>
 
