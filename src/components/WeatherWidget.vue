@@ -42,19 +42,19 @@
 
 <script lang="ts">
 // Built-in Imports
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onBeforeMount, ref } from "vue";
 
 // 3rd Party Import
 import { useLoading } from 'vue-loading-overlay'
-
-// Component Import
-import MiniForecastWidget from "./MiniForecastWidget.vue";
 
 // Custom Utils and Models Imports
 import { Weather, WeatherSummary } from "@/models/Weather";
 import { windDirection } from "@/utils/wind-direction";
 import { getCountryByCode } from "@/utils/countries-list";
 import { getIconPath } from "@/utils/fetch-weather-icon"
+
+// Component Import
+import MiniForecastWidget from "./MiniForecastWidget.vue";
 
 export default defineComponent({
   setup(props) {
@@ -102,10 +102,10 @@ export default defineComponent({
       await fetch(geoCodeAPI)
         .then(res => res.json())
         .then(res => {
-          const country = getCountryByCode(res[0].country);
+          const country = getCountryByCode(res[0]?.country);
           currentWeather.value.country = country;
           location.value = {
-            city: res[0].name,
+            city: res[0]?.name,
             country: country,
           };
         });
@@ -120,47 +120,50 @@ export default defineComponent({
       const resp = await response.json();
 
       // Manually mapping response to our model
-      const mappedData: Weather = {
-        weatherId: resp.current.weather[0].id,
-        weatherMain: resp.current.weather[0].main,
-        weatherIcon: resp.current.weather[0].icon,
-        weatherDescription: resp.current.weather[0].description,
-        temperature: resp.current.temp,
-        date: resp.current.dt,
-        humidity: resp.current.humidity,
-        uvi: resp.current.uvi,
-        windSpeed: resp.current.wind_speed,
-        windDeg: resp.current.wind_deg,
-      }
-
-      // Update current weather data
-      currentWeather.value = mappedData;
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const dailyForecastData: any[] = resp.daily;
-      const mappedDailyForecast: WeatherSummary[] = [];
-
-      // Manually mapping Daily forecast response array to our custom model array
-      dailyForecastData.map((obj) => {
-        const mappedDailyForecastData: WeatherSummary = {
-          weatherMain: obj.weather[0].main,
-          weatherId: obj.weather[0].id,
-          weatherDescription: obj.weather[0].description,
-          weatherIcon: obj.weather[0].icon,
-          date: obj.dt,
-          maxTemperature: Math.round(obj.temp.max),
-          minTemperature: Math.round(obj.temp.min),
+      if (resp.current) {
+        const mappedData: Weather = {
+          weatherId: resp.current.weather[0].id,
+          weatherMain: resp.current.weather[0].main,
+          weatherIcon: resp.current.weather[0].icon,
+          weatherDescription: resp.current.weather[0].description,
+          temperature: resp.current.temp,
+          date: resp.current.dt,
+          humidity: resp.current.humidity,
+          uvi: resp.current.uvi,
+          windSpeed: resp.current.wind_speed,
+          windDeg: resp.current.wind_deg,
         }
 
-        mappedDailyForecast.push(mappedDailyForecastData);
-      });
-
-      // Update forecast data with next five days only
-      weatherData.value = mappedDailyForecast.slice(0, 6);
-
-      loader.hide();
+        // Update current weather data
+        currentWeather.value = mappedData;
+      }
 
 
+      if (resp.daily) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const dailyForecastData: any[] = resp.daily;
+        const mappedDailyForecast: WeatherSummary[] = [];
+
+        // Manually mapping Daily forecast response array to our custom model array
+        dailyForecastData.map((obj) => {
+          const mappedDailyForecastData: WeatherSummary = {
+            weatherMain: obj.weather[0].main,
+            weatherId: obj.weather[0].id,
+            weatherDescription: obj.weather[0].description,
+            weatherIcon: obj.weather[0].icon,
+            date: obj.dt,
+            maxTemperature: Math.round(obj.temp.max),
+            minTemperature: Math.round(obj.temp.min),
+          }
+
+          mappedDailyForecast.push(mappedDailyForecastData);
+        });
+
+        // Update forecast data with next five days only
+        weatherData.value = mappedDailyForecast.slice(0, 6);
+
+        loader.hide();
+      }
 
     }
 
@@ -177,7 +180,7 @@ export default defineComponent({
     // ---------------------------- Life Cycle Hook -----------------------------
     // --------------------------------------------------------------------------
 
-    onMounted(() => {
+    onBeforeMount(() => {
       reverseGeocode();
       fetchWeatherForecast();
     });
@@ -187,11 +190,11 @@ export default defineComponent({
     // --------------------------------------------------------------------------
 
 
+    const weatherIcon = computed(() => getIconPath(currentWeather.value.weatherId, currentWeather.value.weatherMain, currentWeather.value.weatherIcon)); // Get weather icon by invoking custom 'getWeatherIcon' util function
     const windDir = computed(() => windDirection(currentWeather.value.windDeg)); // Computing wind direction by invoking custom 'windDirection' util function
     const country = computed(() => getCountryByCode(currentWeather.value.country)); // Computing country by invoking custom 'getCountryByCode' util function
     const temperature = computed(() => Math.round(currentWeather.value.temperature)); // Round Temperature to nearest integer
     const windSpeed = computed(() => Math.round(currentWeather.value.windSpeed)); // Round Wind speed to nearest integer
-    const weatherIcon = computed(() => getIconPath(currentWeather.value.weatherId, currentWeather.value.weatherMain, currentWeather.value.weatherIcon)); // Get weather icon by invoking custom 'getWeatherIcon' util function
 
     // --------------------------------------------------------------------------
     // --------------------------------- Return ---------------------------------

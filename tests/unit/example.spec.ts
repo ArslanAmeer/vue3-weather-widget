@@ -1,12 +1,15 @@
-import { shallowMount } from '@vue/test-utils'
-import HelloWorld from '@/components/HelloWorld.vue'
+require('isomorphic-fetch');
+import { shallowMount } from '@vue/test-utils';
+import WeatherWidget from '@/components/WeatherWidget.vue';
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      props: { msg }
-    })
-    expect(wrapper.text()).toMatch(msg)
-  })
-})
+describe('WeatherWidget.vue', () => {
+	it('renders', () => {
+		const wrapper = shallowMount(WeatherWidget, {
+			// props: {
+			// 	lat: 41.3888,
+			// 	lon: 2.1667,
+			// },
+		});
+		expect(wrapper.text()).toMatch('');
+	});
+});
