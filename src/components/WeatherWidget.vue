@@ -7,6 +7,8 @@
       <span title="Turn On/Off Rain Effect" @click="makeItRain" class="icon-rain-drop"></span>
       <span title="Refresh Weather" @click="updateWeather" class="icon-reload"></span>
 
+      <span @click="updateWeather" class="icon-reload"></span>
+
       <!-- Current weather status -->
       <div class="current-weather">
 
@@ -184,6 +186,7 @@ export default defineComponent({
     // -------------------- Computed Functions / Properties ---------------------
     // --------------------------------------------------------------------------
 
+
     const windDir = computed(() => windDirection(currentWeather.value.windDeg)); // Computing wind direction by invoking custom 'windDirection' util function
     const country = computed(() => getCountryByCode(currentWeather.value.country)); // Computing country by invoking custom 'getCountryByCode' util function
     const temperature = computed(() => Math.round(currentWeather.value.temperature)); // Round Temperature to nearest integer
@@ -223,6 +226,7 @@ export default defineComponent({
   border-radius: 20px;
   padding: 20px 30px;
   box-sizing: border-box;
+  position: relative;
 
   @media screen and (max-width: 768px) {
     width: 375px;
