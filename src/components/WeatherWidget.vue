@@ -65,7 +65,7 @@ export default defineComponent({
     // --------------------------------------------------------------------------
 
     const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=${props.lon}&lat=${props.lat}&units=metric&exclude=minutely,hourly&appid=${process.env.VUE_APP_OPEN_WEATHER_API_KEY}`;
-    const geoCodeAPI = `http://api.openweathermap.org/geo/1.0/reverse?lon=${props.lon}&lat=${props.lat}&limit=1&appid=${process.env.VUE_APP_OPEN_WEATHER_API_KEY}`;
+    const geoCodeAPI = `https://api.openweathermap.org/geo/1.0/reverse?lon=${props.lon}&lat=${props.lat}&limit=1&appid=${process.env.VUE_APP_OPEN_WEATHER_API_KEY}`;
 
     // TODO: Dummy data | to be removed later
     let dummyData: Weather = {
