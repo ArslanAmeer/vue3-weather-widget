@@ -6,14 +6,12 @@
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"test:unit": "vue-cli-service test:unit --no-cache",
-		"test:e2e": "vue-cli-service test:e2e",
 		"lint": "vue-cli-service lint"
 	},
 	"dependencies": {
 		"core-js": "^3.8.3",
 		"dotenv-webpack": "^7.1.0",
-		"vue": "^3.2.13",
-		"vue-loading-overlay": "^5.0.3"
+		"vue": "^3.2.13"
 	},
 	"devDependencies": {
 		"@types/jest": "^27.0.1",
@@ -29,7 +27,6 @@
 		"@vue/test-utils": "^2.0.0-0",
 		"@vue/vue3-jest": "^27.0.0-alpha.1",
 		"babel-jest": "^27.0.6",
-		"cypress": "^8.3.0",
 		"eslint": "^7.32.0",
 		"eslint-plugin-vue": "^8.0.3",
 		"isomorphic-fetch": "^3.0.0",
