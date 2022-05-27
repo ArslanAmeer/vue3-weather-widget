@@ -1,6 +1,11 @@
 <template>
+
   <Transition appear name="fade">
-    <div class="widget-wrap outer" v-if="location.city">
+    <div class="widget-wrap weather"
+      :class="{ rain: currentWeather.weatherMain === 'Rain' || rain, snow: currentWeather.weatherMain === 'Snow' }"
+      v-if="location.city">
+      <span title="Turn On/Off Rain Effect" @click="makeItRain" class="icon-rain-drop"></span>
+      <span title="Refresh Weather" @click="updateWeather" class="icon-reload"></span>
 
       <!-- Current weather status -->
       <div class="current-weather">
@@ -25,7 +30,7 @@
       </div>
       <!-- Next Five days weather forecast -->
       <Transition name="slide-fade">
-        <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper inner">
+        <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper">
           <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
         </div>
       </Transition>
@@ -51,8 +56,12 @@ import { getIconPath } from "@/utils/fetch-weather-icon"
 
 export default defineComponent({
   setup(props) {
-    const $loading = useLoading();
 
+    // --------------------------------------------------------------------------
+    // ------------------------- Initializing variables -------------------------
+    // --------------------------------------------------------------------------
+
+    const $loading = useLoading();
 
     const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=${props.lon}&lat=${props.lat}&units=metric&exclude=minutely,hourly&appid=${process.env.OPEN_WEATHER_API_KEY}`;
     const geoCodeAPI = `http://api.openweathermap.org/geo/1.0/reverse?lon=${props.lon}&lat=${props.lat}&limit=1&appid=${process.env.OPEN_WEATHER_API_KEY}`;
@@ -79,6 +88,12 @@ export default defineComponent({
       city: "",
       country: "-",
     });
+
+    const rain = ref(false)
+
+    // --------------------------------------------------------------------------
+    // ---------------------------- Custom Functions ----------------------------
+    // --------------------------------------------------------------------------
 
     // Fetching location with latitude and longitude
     const reverseGeocode = async () => {
@@ -143,13 +158,31 @@ export default defineComponent({
 
       loader.hide();
 
+
+
     }
+
+    const updateWeather = async () => {
+      await fetchWeatherForecast();
+    };
+
+    const makeItRain = () => {
+      rain.value = !rain.value;
+    }
+
+
+    // --------------------------------------------------------------------------
+    // ---------------------------- Life Cycle Hook -----------------------------
+    // --------------------------------------------------------------------------
 
     onMounted(() => {
       reverseGeocode();
       fetchWeatherForecast();
     });
 
+    // --------------------------------------------------------------------------
+    // -------------------- Computed Functions / Properties ---------------------
+    // --------------------------------------------------------------------------
 
     const windDir = computed(() => windDirection(currentWeather.value.windDeg)); // Computing wind direction by invoking custom 'windDirection' util function
     const country = computed(() => getCountryByCode(currentWeather.value.country)); // Computing country by invoking custom 'getCountryByCode' util function
@@ -157,7 +190,11 @@ export default defineComponent({
     const windSpeed = computed(() => Math.round(currentWeather.value.windSpeed)); // Round Wind speed to nearest integer
     const weatherIcon = computed(() => getIconPath(currentWeather.value.weatherId, currentWeather.value.weatherMain, currentWeather.value.weatherIcon)); // Get weather icon by invoking custom 'getWeatherIcon' util function
 
-    return { location, weatherData, windDir, currentWeather, country, temperature, windSpeed, weatherIcon };
+    // --------------------------------------------------------------------------
+    // --------------------------------- Return ---------------------------------
+    // --------------------------------------------------------------------------
+
+    return { location, weatherData, windDir, currentWeather, country, temperature, windSpeed, weatherIcon, updateWeather, makeItRain, rain };
   },
   components: {
     MiniForecastWidget
@@ -176,6 +213,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import url("../assets/styles/animations/weather-animation.css");
+
 .widget-wrap {
   width: 632px;
   max-width: 900px;
@@ -184,6 +223,51 @@ export default defineComponent({
   border-radius: 20px;
   padding: 20px 30px;
   box-sizing: border-box;
+
+  @media screen and (max-width: 768px) {
+    width: 375px;
+    max-width: 632px;
+  }
+
+  .icon-reload {
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background-image: url('https://img.icons8.com/external-febrian-hidayat-flat-febrian-hidayat/344/external-Refresh-user-interface-febrian-hidayat-flat-febrian-hidayat.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
+    transition: all 0.5s ease;
+    z-index: 999;
+  }
+
+  .icon-rain-drop {
+    position: absolute;
+    top: -30px;
+    left: 10px;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background-image: url('https://img.icons8.com/external-rabit-jes-detailed-outline-rabit-jes/344/external-rain-drops-weather-rabit-jes-detailed-outline-rabit-jes.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
+    transition: all 0.5s ease;
+    z-index: 999;
+  }
+
+  &:hover {
+
+    .icon-reload,
+    .icon-rain-drop {
+      top: 10px;
+    }
+  }
 
   .current-weather {
     display: flex;
@@ -215,6 +299,10 @@ export default defineComponent({
         margin: 0;
         padding: 0;
         text-transform: capitalize;
+
+        @media screen and (max-width: 768px) {
+          font-size: 22px;
+        }
       }
 
       h3 {
@@ -228,6 +316,7 @@ export default defineComponent({
           margin: 0;
           padding: 0;
           margin-bottom: 5px;
+          font-size: 15px;
         }
       }
     }
@@ -237,10 +326,16 @@ export default defineComponent({
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
+    transition: all 0.4 ease;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
   }
 }
 
-// Transition Styling
+// Below Animation/transition on components work better when written in same file
+// @import url("../assets/styles/animations/component-animation.css");
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 1s ease;
@@ -251,10 +346,6 @@ export default defineComponent({
   opacity: 0;
 }
 
-/*
-  Enter and leave animations can use different
-  durations and timing functions.
-*/
 .slide-fade-enter-active {
   transition: all 1.5s ease-out;
 }
