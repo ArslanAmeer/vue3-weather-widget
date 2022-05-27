@@ -61,6 +61,15 @@ export default defineComponent({
     height: 100%;
     background-color: transparent;
     cursor: pointer;
+    transition: all 0.4s ease;
+
+    @media screen and (max-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 20px;
+    }
 
 
     .solo {
@@ -74,6 +83,10 @@ export default defineComponent({
         margin: 0;
         padding: 0;
         text-transform: capitalize;
+
+        @media screen and (max-width: 768px) {
+            width: 100px;
+        }
     }
 
     .weather-icon {
@@ -87,6 +100,12 @@ export default defineComponent({
             object-position: center;
             filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
         }
+
+        @media screen and (max-width: 768px) {
+            width: 50px;
+            height: 50px;
+
+        }
     }
 
     p {
@@ -97,6 +116,10 @@ export default defineComponent({
         &.max-temp {
             color: #FF0000;
             margin-bottom: 4px;
+
+            @media screen and (max-width: 768px) {
+                margin-bottom: 0;
+            }
         }
 
         &.min-temp {
