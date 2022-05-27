@@ -1,6 +1,6 @@
 <template>
-  <Transition :duration="550" name="nested">
-    <div class="widget-wrap outer" v-if="currentWeather !== null && currentWeather != undefined && location.city">
+  <Transition appear name="fade">
+    <div class="widget-wrap outer" v-if="location.city">
 
       <!-- Current weather status -->
       <div class="current-weather">
@@ -24,9 +24,11 @@
         </div>
       </div>
       <!-- Next Five days weather forecast -->
-      <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper inner">
-        <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
-      </div>
+      <Transition name="slide-fade">
+        <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper inner">
+          <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
+        </div>
+      </Transition>
     </div>
   </Transition>
 </template>
@@ -239,37 +241,32 @@ export default defineComponent({
 }
 
 // Transition Styling
-.nested-enter-active,
-.nested-leave-active {
-  transition: all 0.8s ease-in-out;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease;
 }
 
-/* delay leave of parent element */
-.nested-leave-active {
-  transition-delay: 0.8s;
-}
-
-.nested-enter-from,
-.nested-leave-to {
-  transform: translateY(30px);
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
-/* we can also transition nested elements using nested selectors */
-.nested-enter-active .inner,
-.nested-leave-active .inner {
-  transition: all 1s ease-in-out;
+/*
+  Enter and leave animations can use different
+  durations and timing functions.
+*/
+.slide-fade-enter-active {
+  transition: all 1.5s ease-out;
 }
 
-/* delay enter of nested element */
-.nested-enter-active .inner {
-  transition-delay: 1s;
+.slide-fade-leave-active {
+  transition: all 1s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
-.nested-enter-from .inner,
-.nested-leave-to .inner {
-  transform: translateX(30px);
-  opacity: 0.001;
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
 }
 </style>
 
