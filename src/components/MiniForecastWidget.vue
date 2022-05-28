@@ -73,19 +73,18 @@ export default defineComponent({
 
 
     .solo {
-        background: linear-gradient(180deg, #0668C2 0%, #1C0168 100%, rgba(68, 12, 158, 0) 100%), #C4C4C4;
+        @include linear-gradient-background;
         box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 20px;
     }
 
     h6 {
+        @include reset;
         font-size: 15px;
-        margin: 0;
-        padding: 0;
         text-transform: capitalize;
 
-        @media screen and (max-width: 768px) {
-            width: 100px;
+        @media screen and (min-width:300px)and(max-width: 768px) {
+            width: 50px;
         }
     }
 

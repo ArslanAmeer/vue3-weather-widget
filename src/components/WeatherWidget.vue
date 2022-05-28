@@ -225,12 +225,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import url("../assets/styles/animations/weather-animation.css");
+@import url("../assets/styles/css/animations/weather-animation.css");
+
 
 .widget-wrap {
   width: 632px;
   max-width: 900px;
-  background: linear-gradient(180deg, #0668C2 0%, #1C0168 100%, rgba(68, 12, 158, 0) 100%), #C4C4C4;
+  @include linear-gradient-background;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   padding: 20px 30px;
@@ -269,7 +270,7 @@ export default defineComponent({
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
+    @include white-image-filter;
     transition: all 0.5s ease;
     z-index: 999;
   }
@@ -296,7 +297,7 @@ export default defineComponent({
         height: 100%;
         // object-fit: contain;
         // object-position: center;
-        filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
+        @include white-image-filter;
 
       }
     }

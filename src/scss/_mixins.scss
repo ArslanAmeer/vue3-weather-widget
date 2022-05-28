@@ -1,0 +1,15 @@
+@mixin reset {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+
+@mixin linear-gradient-background {
+    background: linear-gradient(180deg, $secondary-color 0%, $primary-color 100%, $tint-color 100%), $light-color;
+    background: linear-gradient(180deg, #0668c2, #1c0168 100%, rgba(68, 12, 158, 0) 0), #c4c4c4;
+}
+
+@mixin white-image-filter {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(220deg) brightness(101%) contrast(102%);
+}

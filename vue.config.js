@@ -9,3 +9,15 @@ module.exports = defineConfig({
 // 		plugins: [new Dotenv()],
 // 	},
 // };
+
+// Load Scss files globally
+const path = require('path');
+module.exports = {
+	css: {
+		loaderOptions: {
+			scss: {
+				additionalData: `@import "~@/scss/style.scss";`,
+			},
+		},
+	},
+};
