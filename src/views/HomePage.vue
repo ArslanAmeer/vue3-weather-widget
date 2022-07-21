@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <WeatherWidget :lat="41.3888" :lon="2.159" />
+    <!-- Props: lat: number (optional), lon :number (optional), openWeatherApiKey: string (Required) -->
+    <WeatherWidget :openWeatherApiKey="apiKey" />
   </div>
 </template>
 
@@ -8,9 +9,15 @@
 import { defineComponent } from 'vue';
 import WeatherWidget from '@/components/WeatherWidget.vue';
 
+
 export default defineComponent({
   components: {
     WeatherWidget,
+  },
+  setup() {
+    return {
+      apiKey: process.env.VUE_APP_OPEN_WEATHER_API_KEY
+    };
   },
 });
 </script>
