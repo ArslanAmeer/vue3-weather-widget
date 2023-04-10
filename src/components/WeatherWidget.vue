@@ -32,7 +32,7 @@
       </div>
       <!-- Next Five days weather forecast -->
       <Transition name="slide-fade">
-        <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper">
+        <div v-if="weatherData.length && weatherData.length > 0" class="mini-forecast-widget-wrapper">
           <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
         </div>
       </Transition>
@@ -64,9 +64,6 @@ export default defineComponent({
     // ------------------------- Initializing variables -------------------------
     // --------------------------------------------------------------------------
 
-    const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=${props.lon}&lat=${props.lat}&units=metric&exclude=minutely,hourly&appid=${process.env.VUE_APP_OPEN_WEATHER_API_KEY}`;
-    const geoCodeAPI = `https://api.openweathermap.org/geo/1.0/reverse?lon=${props.lon}&lat=${props.lat}&limit=1&appid=${process.env.VUE_APP_OPEN_WEATHER_API_KEY}`;
-
     // TODO: Dummy data | to be removed later
     let dummyData: Weather = {
       city: "---",
@@ -92,13 +89,38 @@ export default defineComponent({
 
     const rain = ref(false)
     const isLoading = ref(true);
+    const coordinates = ref<{ lat: any, lon: any }>({
+      lat: 0,
+      lon: 0,
+    });
+
 
     // --------------------------------------------------------------------------
     // ---------------------------- Custom Functions ----------------------------
     // --------------------------------------------------------------------------
 
+    const getLocationCoordinates = async () => {
+      return new Promise((resolve, reject) => {
+
+        if (!("geolocation" in navigator)) {
+          reject(new Error('Geolocation is not available.'));
+        }
+
+        navigator.geolocation.getCurrentPosition((pos: any) => {
+          resolve(pos);
+        }, err => {
+          reject(err);
+        });
+
+      });
+    };
+
     // Fetching location with latitude and longitude
     const reverseGeocode = async () => {
+      if (coordinates.value.lat === 0 || coordinates.value.lon === 0) {
+        return;
+      }
+      const geoCodeAPI = `https://api.openweathermap.org/geo/1.0/reverse?lon=${coordinates.value.lon}&lat=${coordinates.value.lat}&limit=1&appid=${props.openWeatherApiKey}`;
       await fetch(geoCodeAPI)
         .then(res => res.json())
         .then(res => {
@@ -113,10 +135,13 @@ export default defineComponent({
 
     // Fetches weather data from the Open Weather API
     const fetchWeatherForecast = async () => {
+      if (coordinates.value.lat === 0 || coordinates.value.lon === 0) {
+        return;
+      }
       isLoading.value = true;
       // const response = 
       // const resp = await response.json();
-
+      const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lon=${coordinates.value.lon}&lat=${coordinates.value.lat}&units=metric&exclude=minutely,hourly&appid=${props.openWeatherApiKey}`;
       await fetch(weatherAPI)
         .then(resp => resp.json())
         .then((resp) => {
@@ -187,9 +212,38 @@ export default defineComponent({
     // --------------------------------------------------------------------------
 
     onBeforeMount(() => {
-      reverseGeocode();
-      fetchWeatherForecast();
+
+      // Fetching location with latitude and longitude
+      if (props.lat && props.lon) {
+
+        console.log("Fetching weather data from lat and lon");
+
+        coordinates.value = {
+          lat: props.lat,
+          lon: props.lon,
+        };
+        reverseGeocode();
+        fetchWeatherForecast();
+
+      } else {
+
+        console.log("Fetching weather data from location");
+
+        getLocationCoordinates().then((pos: any) => {
+          coordinates.value = {
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+          };
+          reverseGeocode();
+          fetchWeatherForecast();
+
+        }).catch((err) => {
+          console.log(err);
+        });
+
+      }
     });
+
 
     // --------------------------------------------------------------------------
     // -------------------- Computed Functions / Properties ---------------------
@@ -214,12 +268,16 @@ export default defineComponent({
   props: {
     lat: {
       type: Number,
-      required: true,
+      required: false,
     },
     lon: {
       type: Number,
-      required: true,
+      required: false,
     },
+    openWeatherApiKey: {
+      type: String,
+      required: true,
+    }
   }
 });
 </script>
