@@ -1,12 +1,15 @@
 {
-	"name": "weather-widget",
+	"name": "vue3-open-weather-widget",
 	"version": "0.1.0",
-	"private": true,
+	"private": false,
 	"scripts": {
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"test:unit": "vue-cli-service test:unit --no-cache",
 		"lint": "vue-cli-service lint"
+	},
+	"peerDependencies": {
+		"vue": "^3.2.13"
 	},
 	"dependencies": {
 		"core-js": "^3.8.3",
@@ -35,5 +38,28 @@
 		"sass-loader": "^12.0.0",
 		"ts-jest": "^27.0.4",
 		"typescript": "~4.5.5"
-	}
+	},
+	"description": "Weather Widget is a Vue 3.0 project that displays the current weather conditions providing coordinates.",
+	"main": "index.js",
+	"directories": {
+		"test": "tests"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ArslanAmeer/vue3-weather-widget.git"
+	},
+	"keywords": [
+		"arslan",
+		"vue3",
+		"weather-widget",
+		"weather",
+		"widget",
+		"vue3-weather-widget"
+	],
+	"author": "ArslanAmeer",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ArslanAmeer/vue3-weather-widget/issues"
+	},
+	"homepage": "https://github.com/ArslanAmeer/vue3-weather-widget#readme"
 }
