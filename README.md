@@ -81,7 +81,7 @@ The WeatherWidget component accepts the following props:
 
 ![](demo.gif)
 
-# **LIVE DEMO. [TRY NOW](https://vue-weather-widget.netlify.app//)** 😍
+# **LIVE DEMO. [TRY NOW](https://vue-weather-widget.vercel.app/)** 😍
 
 ## 💡**NOTE :**
 
