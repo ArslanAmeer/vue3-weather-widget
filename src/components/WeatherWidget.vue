@@ -32,7 +32,7 @@
       </div>
       <!-- Next Five days weather forecast -->
       <Transition name="slide-fade">
-        <div v-if="weatherData != [] && weatherData.length > 0" class="mini-forecast-widget-wrapper">
+        <div v-if="weatherData.length && weatherData.length > 0" class="mini-forecast-widget-wrapper">
           <MiniForecastWidget v-for="(obj, index) in weatherData" :weatherForecast="obj" :key="index" />
         </div>
       </Transition>

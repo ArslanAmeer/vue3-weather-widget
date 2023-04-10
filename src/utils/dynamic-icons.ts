@@ -39,19 +39,19 @@ const weatherIcons = [
 	{
 		id: [600, 601, 602, 611, 612, 613, 620, 621, 622],
 		main: 'snow',
-		icon: '13d',
+		icon: '13d,13n',
 		wwIcon: 'snow',
 	},
 	{
 		id: [615, 616],
 		main: 'snow',
-		icon: '13d',
+		icon: '13d,13n',
 		wwIcon: 'hail',
 	},
 	{
 		id: [701, 711, 721, 731, 741, 751, 761, 762, 771, 781],
 		main: 'mist,smoke,haze,dust,fog,sand,dust,ash,squall,tornado',
-		icon: '50d',
+		icon: '50d,50n',
 		wwIcon: 'cloud-fog',
 	},
 	{
