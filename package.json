@@ -1,6 +1,6 @@
 {
 	"name": "vue3-open-weather-widget",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"private": false,
 	"types": "index.d.ts",
 	"scripts": {
