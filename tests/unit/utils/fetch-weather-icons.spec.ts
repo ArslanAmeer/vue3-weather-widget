@@ -1,4 +1,4 @@
-import { getIconPath } from '@/utils/fetch-weather-icon';
+import { getIconPath } from '../../../src/utils/fetch-weather-icon';
 
 describe('Get Icon Path', () => {
 	test('Return should be clear-sky-day', () => {

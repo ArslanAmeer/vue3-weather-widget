@@ -1,5 +1,5 @@
-import { slugify } from '@/utils/slugify';
-import { getWeatherIconName } from '@/utils/dynamic-icons';
+import { slugify } from '../utils/slugify';
+import { getWeatherIconName } from '../utils/dynamic-icons';
 
 /**
  *

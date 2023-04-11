@@ -1,4 +1,4 @@
-import { windDirection } from '@/utils/wind-direction';
+import { windDirection } from '../../../src/utils/wind-direction';
 
 describe('Get Wind Direction by passing Degrees', () => {
 	test('Return should NW', () => {

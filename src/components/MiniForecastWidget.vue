@@ -22,8 +22,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { WeatherSummary } from "@/models/Weather";
-import { getIconPath } from "@/utils/fetch-weather-icon"
+import { WeatherSummary } from "../models/Weather";
+import { getIconPath } from "../utils/fetch-weather-icon"
 
 export default defineComponent({
     props: {

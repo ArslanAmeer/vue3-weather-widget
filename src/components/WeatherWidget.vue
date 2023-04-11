@@ -49,10 +49,10 @@
 import { computed, defineComponent, onBeforeMount, ref } from "vue";
 
 // Custom Utils and Models Imports
-import { Weather, WeatherSummary } from "@/models/Weather";
-import { windDirection } from "@/utils/wind-direction";
-import { getCountryByCode } from "@/utils/countries-list";
-import { getIconPath } from "@/utils/fetch-weather-icon"
+import { Weather, WeatherSummary } from "../models/Weather";
+import { windDirection } from "../utils/wind-direction";
+import { getCountryByCode } from "../utils/countries-list";
+import { getIconPath } from "../utils/fetch-weather-icon"
 
 // Component Import
 import MiniForecastWidget from "./MiniForecastWidget.vue";
