@@ -49,7 +49,7 @@ Import and register the WeatherWidget component in your Vue3 application:
 ```typescript
   import { createApp } from 'vue';
   import App from './App.vue';
-  import WeatherWidget from '@arslan/vue3-open-weather-widget';
+  import WeatherWidget from 'vue3-open-weather-widget';
 
   const app = createApp(App);
 
