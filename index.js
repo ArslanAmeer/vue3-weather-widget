@@ -1,5 +1,5 @@
 // index.js
-import WeatherWidget from '@/components/WeatherWidget.vue';
+import WeatherWidget from './src/components/WeatherWidget.vue';
 
 const plugin = {
     install: (app, options) => {
