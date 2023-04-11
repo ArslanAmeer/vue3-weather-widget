@@ -266,6 +266,10 @@ export default defineComponent({
     MiniForecastWidget
   },
   props: {
+    openWeatherApiKey: {
+      type: String,
+      required: true,
+    },
     lat: {
       type: Number,
       required: false,
@@ -273,10 +277,6 @@ export default defineComponent({
     lon: {
       type: Number,
       required: false,
-    },
-    openWeatherApiKey: {
-      type: String,
-      required: true,
     }
   }
 });
@@ -284,6 +284,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import url("../assets/styles/css/animations/weather-animation.css");
+@import "../scss/style.scss";
 
 
 .widget-wrap {

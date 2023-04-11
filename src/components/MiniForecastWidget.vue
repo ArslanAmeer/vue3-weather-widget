@@ -1,6 +1,5 @@
 <template>
     <div class="mini-widget" :title="weatherForecast.weatherDescription">
-
         <h6 class="day-header">
             {{ getDay }}
         </h6>
@@ -9,48 +8,50 @@
             <img :src="getImage" :alt="weatherForecast.weatherMain" />
         </div>
 
-        <p class="max-temp">
-            {{ weatherForecast.maxTemperature }}°C
-        </p>
+        <p class="max-temp">{{ weatherForecast.maxTemperature }}°C</p>
 
-        <p class="min-temp">
-            {{ weatherForecast.minTemperature }}°C
-        </p>
-
+        <p class="min-temp">{{ weatherForecast.minTemperature }}°C</p>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { WeatherSummary } from "../models/Weather";
-import { getIconPath } from "../utils/fetch-weather-icon"
+import { getIconPath } from "../utils/fetch-weather-icon";
 
 export default defineComponent({
     props: {
-
         weatherForecast: {
             type: Object as PropType<WeatherSummary>,
-            required: true
-        }
+            required: true,
+        },
     },
     computed: {
         getImage() {
-            return getIconPath(this.weatherForecast.weatherId, this.weatherForecast.weatherMain, this.weatherForecast.weatherIcon);
+            return getIconPath(
+                this.weatherForecast.weatherId,
+                this.weatherForecast.weatherMain,
+                this.weatherForecast.weatherIcon
+            );
         },
         getDay() {
-            const currentDay = new Date().toLocaleDateString("en", { weekday: "long" });
-            const forecastDay = new Date(this.weatherForecast.date * 1000).toLocaleDateString("en", { weekday: "long", });
+            const currentDay = new Date().toLocaleDateString("en", {
+                weekday: "long",
+            });
+            const forecastDay = new Date(
+                this.weatherForecast.date * 1000
+            ).toLocaleDateString("en", { weekday: "long" });
             if (currentDay === forecastDay) {
                 return "Today";
             }
             return forecastDay;
-        }
-    }
+        },
+    },
 });
 </script>
 
-
 <style lang="scss" scoped>
+@import "../scss/style.scss";
 .mini-widget {
     display: flex;
     flex-direction: column;
@@ -71,7 +72,6 @@ export default defineComponent({
         margin-bottom: 20px;
     }
 
-
     .solo {
         @include linear-gradient-background;
         box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -83,7 +83,7 @@ export default defineComponent({
         font-size: 15px;
         text-transform: capitalize;
 
-        @media screen and (min-width:300px)and(max-width: 768px) {
+        @media screen and (min-width: 300px) and (max-width: 768px) {
             width: 50px;
         }
     }
@@ -103,7 +103,6 @@ export default defineComponent({
         @media screen and (max-width: 768px) {
             width: 50px;
             height: 50px;
-
         }
     }
 
@@ -113,7 +112,7 @@ export default defineComponent({
         padding: 0;
 
         &.max-temp {
-            color: #FF0000;
+            color: #ff0000;
             margin-bottom: 4px;
 
             @media screen and (max-width: 768px) {
@@ -122,7 +121,7 @@ export default defineComponent({
         }
 
         &.min-temp {
-            color: #00FFFF;
+            color: #00ffff;
         }
     }
 }
