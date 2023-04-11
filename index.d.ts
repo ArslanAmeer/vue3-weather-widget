@@ -1,9 +1,6 @@
-import { DefineComponent } from 'vue';
+import { DefineComponent } from "vue";
+import WeatherWidget from "./src/components/WeatherWidget.vue";
 
-interface WeatherWidgetProps {
-  openWeatherApiKey: string;
-}
+declare const _WeatherWidget: DefineComponent<typeof WeatherWidget>;
 
-declare const WeatherWidget: DefineComponent<WeatherWidgetProps>;
-
-export default WeatherWidget;
+export { _WeatherWidget as WeatherWidget };
