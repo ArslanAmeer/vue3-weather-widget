@@ -30,4 +30,25 @@ export default defineConfig({
           VUE_APP_OPEN_WEATHER_API_KEY: JSON.stringify(process.env.VUE_APP_OPEN_WEATHER_API_KEY),
         },
     },
+    build: {
+      lib: {
+        // src/indext.ts is where we have exported the component(s)
+        entry: path.resolve(__dirname, "src/index.ts"),
+        name: "WeatherVueWidget",
+        // the name of the output files when the build is run
+        fileName: "weather-vue-widget",
+      },
+      rollupOptions: {
+        // make sure to externalize deps that shouldn't be bundled
+        // into your library
+        external: ["vue"],
+        output: {
+          // Provide global variables to use in the UMD build
+          // for externalized deps
+          globals: {
+            vue: "Vue",
+          },
+        },
+      },
+    },
 });

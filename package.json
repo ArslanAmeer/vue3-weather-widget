@@ -2,10 +2,22 @@
 	"name": "vue3-open-weather-widget",
 	"version": "0.1.6",
 	"private": false,
+	"type": "module",
+	"files": ["dist"],
+	"main": "./dist/weather-vue-widget.umd.cjs",
+	"module": "./dist/weather-vue-widget.js",
+	"exports": {
+		".": {
+		  "import": "./dist/weather-vue-widget.js",
+		  "require": "./dist/weather-vue-widget.umd.cjs"
+		},
+		"./style.css": "./dist/style.css"
+	  },
+	  "types": "./dist/index.d.ts",
 	"scripts": {
 		"serve": "vite preview",
 		"dev": "vite",
-		"build": "vue-tsc --noEmit && vite build",
+		"build": "vue-tsc --emitDeclarationOnly && vite build",
 		"test:unit": "vue-cli-service test:unit --no-cache",
 		"lint": "vue-cli-service lint",
 		"build:style": "sass --no-charset ./src/scss/style.scss | node ./build/print-banner.js > dist/weatherWidget.css && cleancss -o dist/weatherWidget.min.css dist/weatherWidget.css",
