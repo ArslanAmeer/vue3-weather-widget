@@ -1,4 +1,4 @@
-import { slugify } from '@/utils/slugify';
+import { slugify } from '../../../src/utils/slugify';
 
 describe('Slugify', () => {
 	test('Clear Sky should be clear-sky', () => {

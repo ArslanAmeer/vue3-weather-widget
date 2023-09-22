@@ -271,6 +271,10 @@ export default defineComponent({
     MiniForecastWidget,
   },
   props: {
+    openWeatherApiKey: {
+      type: String,
+      required: true,
+    },
     lat: {
       type: Number,
       required: false,

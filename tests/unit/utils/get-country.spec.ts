@@ -1,4 +1,4 @@
-import { getCountryByCode } from '@/utils/countries-list';
+import { getCountryByCode } from '../../../src/utils/countries-list';
 
 describe('Get Country Name By Country Code', () => {
 	test('Return should be Spain', () => {

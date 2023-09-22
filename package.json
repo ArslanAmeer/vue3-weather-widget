@@ -1,13 +1,25 @@
 {
-	"name": "weather-widget",
-	"version": "0.1.0",
-	"private": true,
+	"name": "vue3-open-weather-widget",
+	"version": "0.1.6",
+	"private": false,
+	"main": "dist/cjs/index.js",
+	"module": "dist/esm/index.mjs",
+	"unpkg": "dist/weatherwidgetcomponent.js",
+	"types": "src/components/index.ts",
 	"scripts": {
 		"serve": "vite preview",
 		"dev": "vite",
 		"build": "vue-tsc --noEmit && vite build",
 		"test:unit": "vue-cli-service test:unit --no-cache",
-		"lint": "vue-cli-service lint"
+		"lint": "vue-cli-service lint",
+		"build:vue": "rollup -c && rollup -c --environment MINIFY",
+		"build:vue:watch": "rollup -c --watch",
+		"build:style": "sass --no-charset ./src/scss/style.scss | node ./build/print-banner.js > dist/weatherWidget.css && cleancss -o dist/weatherWidget.min.css dist/weatherWidget.css",
+		"build:lib": "rimraf dist && npm run build:vue && npm run build:style",
+		"publish:lib": "npm run build:lib && npm publish"
+	},
+	"peerDependencies": {
+		"vue": "^3.2.13"
 	},
 	"dependencies": {
 		"core-js": "^3.8.3",
@@ -15,6 +27,9 @@
 		"vue": "^3.2.13"
 	},
 	"devDependencies": {
+		"@rollup/plugin-babel": "^6.0.3",
+		"@rollup/plugin-commonjs": "^24.1.0",
+		"@rollup/plugin-node-resolve": "^15.0.2",
 		"@types/jest": "^27.0.1",
 		"@typescript-eslint/eslint-plugin": "^5.4.0",
 		"@typescript-eslint/parser": "^5.4.0",
@@ -29,10 +44,18 @@
 		"@vue/test-utils": "^2.0.0-0",
 		"@vue/vue3-jest": "^27.0.0-alpha.1",
 		"babel-jest": "^27.0.6",
+		"clean-css-cli": "^5.6.2",
 		"eslint": "^7.32.0",
 		"eslint-plugin-vue": "^8.0.3",
 		"isomorphic-fetch": "^3.0.0",
 		"jest": "^27.0.5",
+		"rimraf": "^5.0.0",
+		"rollup": "^2.79.1",
+		"rollup-plugin-sass": "^1.12.19",
+		"rollup-plugin-styles": "^4.0.0",
+		"rollup-plugin-terser": "^7.0.2",
+		"rollup-plugin-typescript2": "^0.34.1",
+		"rollup-plugin-vue": "^6.0.0",
 		"sass": "^1.32.7",
 		"sass-loader": "^12.0.0",
 		"ts-jest": "^27.0.4",
@@ -40,4 +63,26 @@
 		"vite": "^4.4.9",
 		"vue-tsc": "^1.8.13"
 	}
+	"description": "Weather Widget is a Vue 3.0 project that displays the current weather conditions providing coordinates.",
+	"directories": {
+		"test": "tests"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ArslanAmeer/vue3-weather-widget.git"
+	},
+	"keywords": [
+		"arslan",
+		"vue3",
+		"weather-widget",
+		"weather",
+		"widget",
+		"vue3-weather-widget"
+	],
+	"author": "ArslanAmeer",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ArslanAmeer/vue3-weather-widget/issues"
+	},
+	"homepage": "https://github.com/ArslanAmeer/vue3-weather-widget#readme"
 }

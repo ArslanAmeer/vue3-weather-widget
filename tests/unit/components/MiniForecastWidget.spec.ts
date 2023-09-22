@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
-import MiniForecastWidget from '@/components/MiniForecastWidget.vue';
-import { WeatherSummary } from '@/models/Weather';
+import MiniForecastWidget from '../../../src/components/MiniForecastWidget.vue';
+import { WeatherSummary } from '../../../src/models/Weather';
 
 describe('WeatherWidget.vue', () => {
 	it('renders', async () => {
