@@ -16,7 +16,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      apiKey: '771df9dbfbddf16ea08fdd61b5aad352'
+      apiKey: '<YOUR_KEY_HERE_FOR_TESTING>'
     };
   },
 });
