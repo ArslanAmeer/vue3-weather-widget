@@ -1,9 +1,10 @@
+@import './variables';
+
 @mixin reset {
     margin: 0;
     padding: 0;
     text-decoration: none;
 }
-
 
 @mixin linear-gradient-background {
     background: linear-gradient(180deg, $secondary-color 0%, $primary-color 100%, $tint-color 100%), $light-color;

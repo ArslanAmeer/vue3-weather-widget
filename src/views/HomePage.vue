@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import WeatherWidget from '@/components/WeatherWidget.vue';
+import WeatherWidget from '../components/WeatherWidget.vue';
 
 
 export default defineComponent({
@@ -16,7 +16,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      apiKey: process.env.VUE_APP_OPEN_WEATHER_API_KEY
+      apiKey: '771df9dbfbddf16ea08fdd61b5aad352'
     };
   },
 });
