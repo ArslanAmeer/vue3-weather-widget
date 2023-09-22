@@ -46,13 +46,14 @@
 import { computed, defineComponent, onBeforeMount, ref } from 'vue';
 
 // Custom Utils and Models Imports
-import { Weather, WeatherSummary } from '@/models/Weather';
-import { windDirection } from '@/utils/wind-direction';
-import { getCountryByCode } from '@/utils/countries-list';
-import { getIconPath } from '@/utils/fetch-weather-icon';
+
 
 // Component Import
 import MiniForecastWidget from './MiniForecastWidget.vue';
+import { Weather, WeatherSummary } from '@/models/Weather';
+import { getCountryByCode } from '@/utils/countries-list';
+import { getIconPath } from '@/utils/fetch-weather-icon';
+import { windDirection } from '@/utils/wind-direction';
 
 export default defineComponent({
   setup(props) {
@@ -282,11 +283,7 @@ export default defineComponent({
     lon: {
       type: Number,
       required: false,
-    },
-    openWeatherApiKey: {
-      type: String,
-      required: true,
-    },
+    }
   },
 });
 </script>

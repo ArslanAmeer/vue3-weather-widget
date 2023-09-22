@@ -1,13 +1,18 @@
 const { defineConfig } = require('@vue/cli-service');
-const path = require('path');
-// const Dotenv = require('dotenv-webpack');
-
 module.exports = defineConfig({
 	transpileDependencies: true,
-	// Uncomment this part if you need to use dotenv-webpack plugin
-	// configureWebpack: {
-	//   plugins: [new Dotenv()],
-	// },
+});
+
+// const Dotenv = require('dotenv-webpack');
+// module.exports = {
+// 	configureWebpack: {
+// 		plugins: [new Dotenv()],
+// 	},
+// };
+
+// Load Scss files globally
+const path = require('path');
+module.exports = {
 	css: {
 		loaderOptions: {
 			scss: {
@@ -15,9 +20,4 @@ module.exports = defineConfig({
 			},
 		},
 	},
-	configureWebpack: {
-		output: {
-			libraryExport: 'default',
-		},
-	},
-});
+};
