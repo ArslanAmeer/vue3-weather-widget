@@ -26,6 +26,8 @@ export default defineConfig({
         ]
       },
     define: {
-        "process.env": {},
+        "process.env": {
+          VUE_APP_OPEN_WEATHER_API_KEY: JSON.stringify(process.env.VUE_APP_OPEN_WEATHER_API_KEY),
+        },
     },
 });
