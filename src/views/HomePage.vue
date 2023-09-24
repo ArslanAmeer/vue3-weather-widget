@@ -16,7 +16,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      apiKey: '<YOUR_OPEN_WEATHER_API_KEY>'
+      apiKey: import.meta.env.VITE_OPEN_WEATHER_API_KEY,
     };
   },
 });
