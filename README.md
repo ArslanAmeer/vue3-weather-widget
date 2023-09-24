@@ -30,6 +30,8 @@ Weather Widget is a Vue 3.0 project that displays the current weather conditions
 
 <small>more features are coming soon</small>
 
+><b>NOTE:</b> Animated icons may not work as `object` element which loaded animated SVGs is replaced by `img` tag due to cloudinary svg security
+
 ---
 
 # How to use widget in your app
@@ -45,29 +47,28 @@ Install the package using npm:
 
 ## Usage
 
-Import and register the WeatherWidget component in your Vue3 application:
+Import component and its styles from `vue3-open-weather-widget` inside your vue3 component:
 ```typescript
-  import { createApp } from 'vue';
-  import App from './App.vue';
-  import WeatherWidget from 'vue3-open-weather-widget';
+<script lang="ts">
+  // TS will give you error in importing but it will work as expcted
+  import { WeatherWidget} from 'vue3-open-weather-widget'
+  import "vue3-open-weather-widget/style.css"
+</script>
 
-  const app = createApp(App);
-
-  app.component('WeatherWidget', WeatherWidget);
-  app.mount('#app');
-```
-In your Vue template, add the WeatherWidget component and pass your OpenWeatherMap API key as a prop:
-```html
 <template>
-  <div id="app">
-    <WeatherWidget :openWeatherApiKey="yourOpenWeatherApiKey" />
-  </div>
+  <WeatherWidget :openWeatherApiKey="'<YOUR-OPEN-WEATHER-API-KEY>'"/>
 </template>
+```
+Pass your OpenWeatherMap API key as a prop:
+```html
+:openWeatherApiKey="<YOUR-OPEN-WEATHER-API-KEY>"
 ```
 
 Replace yourOpenWeatherApiKey with your actual OpenWeatherMap API key.
 
-    The weather widget should now be displayed in your application, showing the weather data for the upcoming week.
+    The weather widget should now be displayed in your application, showing the current weather data for the upcoming week.
+
+You can visit stackblitz demo app [HERE](https://stackblitz.com/edit/vue3-weather-widget?file=src%2Fcomponents%2FHelloWorld.vue) to see the usage
 
 ## Configuration
 
