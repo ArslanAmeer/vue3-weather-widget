@@ -14,7 +14,9 @@
       <div class="current-weather">
         <div class="weather-icon">
           <!-- Using object tag to render Animated SVG. Custom animation using https://www.svgator.com/  -->
-          <object type="image/svg+xml" :data="weatherIcon"></object>
+          <!-- <object type="image/svg+xml" :data="weatherIcon"></object> -->
+          <!-- <embed :src="weatherIcon" type="image/svg+xml" :data="weatherIcon"> -->
+          <img :src="weatherIcon" alt="">
         </div>
 
         <div class="weather-detail">
@@ -355,7 +357,7 @@ export default defineComponent({
       width: 117px;
       height: 117px;
 
-      object {
+      object, embed, img {
         width: 100%;
         height: 100%;
         // object-fit: contain;
