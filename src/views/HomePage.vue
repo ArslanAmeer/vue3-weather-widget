@@ -16,7 +16,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      apiKey: '<YOUR_KEY_HERE_FOR_TESTING>'
+      apiKey: '<YOUR_OPEN_WEATHER_API_KEY>'
     };
   },
 });
