@@ -17,6 +17,7 @@ export function getIconPath(id: number, main: string, icon: string): string {
 	let imgSrc = '';
 	try {
 		imgSrc = `https://res.cloudinary.com/arslanportal/image/upload/v1695575351/weather-widget/ww-icon-${slugify(getWeatherIconName(id, main, icon))}.svg`;
+		// imgSrc = `assets/weather-widget-icons/ww-icon-${slugify(getWeatherIconName(id, main, icon))}.svg`;
 	} catch (error) {
 		console.error(
 			`Image '@/assets/weather-widget-icons/ww-icon-${slugify(
