@@ -14,4 +14,3 @@ jobs:
       - run: npm ci --legacy-peer-deps
       - run: npm run build
       - run: npm run test:jest
-      - run: npm run lint

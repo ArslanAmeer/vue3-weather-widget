@@ -88,7 +88,7 @@ export default defineComponent({
 
     const rain = ref(false);
     const isLoading = ref(true);
-    const coordinates = ref<{ lat: any; lon: any }>({
+    const coordinates = ref<{ lat: number; lon: number }>({
       lat: 0,
       lon: 0,
     });
@@ -104,7 +104,8 @@ export default defineComponent({
         }
 
         navigator.geolocation.getCurrentPosition(
-          (pos: any) => {
+          // eslint-disable-next-line no-undef
+          (pos: GeolocationPosition) => {
             resolve(pos);
           },
           (err) => {
@@ -209,7 +210,6 @@ export default defineComponent({
     onBeforeMount(() => {
       // Fetching location with latitude and longitude
       if (props.lat && props.lon) {
-        console.log('Fetching weather data from lat and lon');
 
         coordinates.value = {
           lat: props.lat,
@@ -218,19 +218,20 @@ export default defineComponent({
         reverseGeocode();
         fetchWeatherForecast();
       } else {
-        console.log('Fetching weather data from location');
-
         getLocationCoordinates()
-          .then((pos: any) => {
+          .then((pos: unknown) => {
             coordinates.value = {
-              lat: pos.coords.latitude,
-              lon: pos.coords.longitude,
+              // eslint-disable-next-line no-undef
+              lat: (pos as GeolocationPosition).coords.latitude,
+              // eslint-disable-next-line no-undef
+              lon: (pos as GeolocationPosition).coords.longitude,
             };
             reverseGeocode();
             fetchWeatherForecast();
           })
           .catch((err) => {
-            console.log(err);
+            // eslint-disable-next-line no-console
+            console.error(err);
           });
       }
     });
@@ -357,7 +358,9 @@ export default defineComponent({
       width: 117px;
       height: 117px;
 
-      object, embed, img {
+      object,
+      embed,
+      img {
         width: 100%;
         height: 100%;
         // object-fit: contain;
