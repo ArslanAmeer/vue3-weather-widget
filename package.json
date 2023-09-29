@@ -19,7 +19,7 @@
 	"scripts": {
 		"serve": "vite preview",
 		"dev": "vite",
-		"build": "vue-tsc --emitDeclarationOnly && vite build",
+		"build": "vue-tsc --emitDeclarationOnly --project tsconfig.build.json && vite build",
 		"test:unit": "vue-cli-service test:unit --no-cache",
 		"lint": "vue-cli-service lint",
 		"build:style": "sass --no-charset ./src/scss/style.scss | node ./build/print-banner.js > dist/weatherWidget.css && cleancss -o dist/weatherWidget.min.css dist/weatherWidget.css",
