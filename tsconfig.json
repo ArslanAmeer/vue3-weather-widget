@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
+    "module": "CommonJS",
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
@@ -14,21 +14,11 @@
     "baseUrl": ".",
     "outDir": "dist",
     "declaration": true,
-    "types": [
-      "webpack-env",
-      "jest"
-    ],
+    "types": ["webpack-env", "jest", "vite/client", "@types/jest"],
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": [
     "src/**/*.ts",
@@ -37,9 +27,5 @@
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
-  "exclude": [
-    "node_modules",
-    "src/App.vue",
-    "src/main.ts"
-  ]
+  "exclude": ["node_modules", "src/App.vue", "src/main.ts"]
 }

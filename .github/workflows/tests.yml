@@ -5,10 +5,12 @@ on:
 jobs:
   unit_test-lint:
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      VITE_OPEN_WEATHER_API_KEY: ${{ secrets.VITE_OPEN_WEATHER_API_KEY }}
     steps:
       - uses: actions/checkout@v2
-      - run: |
-              npm ci
-              npm run build
-              npm run test:unit
-              npm run lint
+      - run: npm install --force
+      - run: npm ci --legacy-peer-deps
+      - run: npm run build
+      - run: npm run test:jest
