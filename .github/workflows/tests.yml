@@ -10,6 +10,7 @@ jobs:
       VITE_OPEN_WEATHER_API_KEY: ${{ secrets.VITE_OPEN_WEATHER_API_KEY }}
     steps:
       - uses: actions/checkout@v2
+      - run: npm install --force
       - run: npm ci
       - run: npm run build
       - run: npm run test:jest
